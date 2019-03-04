@@ -117,16 +117,25 @@ public class LinkedQueue<T> implements QueueADT<T> {
 	   * AUX = REAR
 	   */
 		T deleteElement = null;
-		Node<T> aux = front;
+		Node<T> aux = new Node<T>();
+		aux = front;
 		
 		if(isEmpty() == true) {
 			throw new EmptyCollectionException("linkedQueue");
+		}else if(this.size() == 1){
+
+			deleteElement = front.element;
+			front = null;
+			rear = null;
+			return deleteElement;
+			
 		}else {
+		
 		
 			while(aux.next != rear) {/*Avanzamos hasta que el siguiente del aux sea rear*/
 				aux =aux.next; 
 			}
-			deleteElement = aux.element;
+			deleteElement = aux.next.element;
 			aux.next = null;
 			rear = aux;	
 			count--;
