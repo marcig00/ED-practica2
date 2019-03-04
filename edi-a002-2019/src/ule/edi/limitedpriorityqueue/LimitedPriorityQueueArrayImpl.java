@@ -16,19 +16,30 @@ public class LimitedPriorityQueueArrayImpl<T> implements LimitedPriorityQueue<T>
 
 	public LimitedPriorityQueueArrayImpl(int capacity, int npriorities) {
 		
-      //TODO  asignar los valores de los atributos
 	  // Crear el arrayList, y añadir una cola por cada una de las prioridades (1..npriorities)
 	  // Si capacidad <=0 disparar la excepción: IllegalArgumentException
 	
-		
-		
+		if(capacity <= 0) {
+			
+			throw new IllegalArgumentException();
+			
+		}else {
+			
+			this.capacity = capacity;
+			this.npriorities = npriorities;
+			this.count = 0;
+			colas = new ArrayList<LinkedQueue<T>>();
+			
+			for(int i = 0; i < npriorities; i++) {
+				colas.add(new LinkedQueue<T>());
+			}
+		}		
 	}
 	
 
-
-
     @Override
     public int getCapacity() {
+    	
 		return capacity;
     	
     }
@@ -40,27 +51,49 @@ public class LimitedPriorityQueueArrayImpl<T> implements LimitedPriorityQueue<T>
 
     @Override
     public boolean isFull() {
-    	// TODO Auto-generated method stub
-        return false;
+    	boolean isFull = false;
+    	
+    	if(getCapacity() == getSize()) {
+    		isFull = true;
+    	}
+        return isFull;
     }
 
-	@Override
-	public T enqueue(int p, T element) {
-		// TODO Auto-generated method stub
+    @Override
+	public T enqueue(int p, T element) throws EmptyCollectionException {
 		
-		return null;
-  
+		T returnedElement = null;
+		
+		if(p <= 0 || p > npriorities) {	
+			throw new IllegalArgumentException();
+		
+		}else if(isFull() == true) {
+			colas.get(p-1).enqueue(element); //insertar element en su lugar de la cola
+			count++;
+			for(int i = 0; i < this.npriorities; ++i) {
+				if(colas.get(i).isEmpty() != true) {
+					returnedElement =  colas.get(i).dequeueLast(); //eliminar el elemento que lleva menos esperando en todo el arraylist
+					count--;
+				}
+			}	
+		}else {
+			colas.get(p-1).enqueue(element);
+			count++;
+		}
+		return returnedElement;
 	}
 
 
 	@Override
 	public T first() throws EmptyCollectionException {
-		// TODO Auto-generated method stub
-		return null;
-      
+		T firstElement = null;
+		for(int i = 0; i < npriorities; i++) {
+			//if(colas.get(i).isEmpty() != true) {
+				firstElement = colas.get(i).first();
+			//}
+		}
+		return firstElement;
 	}
-
-
 
 	@Override
 	public T dequeue() throws EmptyCollectionException {
