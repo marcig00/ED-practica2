@@ -63,22 +63,26 @@ public class LimitedPriorityQueueArrayImpl<T> implements LimitedPriorityQueue<T>
 	public T enqueue(int p, T element) throws EmptyCollectionException {
 		
 		T returnedElement = null;
-		
-		if(p <= 0 || p > npriorities) {	
-			throw new IllegalArgumentException();
-		
-		}else if(isFull() == true) {
-			colas.get(p-1).enqueue(element); //insertar element en su lugar de la cola
-			count++;
-			for(int i = 0; i < this.npriorities; ++i) {
-				if(colas.get(i).isEmpty() != true) {
-					returnedElement =  colas.get(i).dequeueLast(); //eliminar el elemento que lleva menos esperando en todo el arraylist
-					count--;
-				}
-			}	
+		if(element == null) {
+			throw new NullPointerException();
 		}else {
-			colas.get(p-1).enqueue(element);
-			count++;
+			if(p <= 0 || p > npriorities) {	
+				throw new IllegalArgumentException();
+		
+			}else if(isFull() == true) {
+				colas.get(p-1).enqueue(element); //insertar element en su lugar de la cola
+				count++;
+				for(int i = npriorities-1; i >= 0; i--) {
+					if(colas.get(i).isEmpty() != true) {
+						returnedElement =  colas.get(i).dequeueLast(); //eliminar el elemento que lleva menos esperando en todo el arraylist
+						count--;
+						return returnedElement;
+					}
+				}	
+			}else {
+				colas.get(p-1).enqueue(element);
+				count++;
+			}
 		}
 		return returnedElement;
 	}
@@ -86,19 +90,36 @@ public class LimitedPriorityQueueArrayImpl<T> implements LimitedPriorityQueue<T>
 
 	@Override
 	public T first() throws EmptyCollectionException {
+		
 		T firstElement = null;
-		for(int i = 0; i < npriorities; i++) {
-			//if(colas.get(i).isEmpty() != true) {
-				firstElement = colas.get(i).first();
-			//}
+		if(getSize() <= 0) {
+			throw new EmptyCollectionException("LimitedPriorityQueueArrayImpl");
+		}else {
+			for(int i = 0; i < npriorities-1; i ++) {
+				if(colas.get(i).isEmpty() != true) {
+				
+					firstElement = colas.get(i).first();
+				}
+			}
 		}
 		return firstElement;
 	}
 
 	@Override
 	public T dequeue() throws EmptyCollectionException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		T returnedElement = null;
+		
+		if(isEmpty() == true) {
+			throw new EmptyCollectionException("LimitedPriorityQueueArrayImpl");
+		}else {
+			for(int i = 0; i < npriorities-1; i++) {
+				if(colas.get(i).isEmpty() != true) {
+					returnedElement = colas.get(i).dequeue();
+				}
+			}
+		}
+		return returnedElement;
 	}
 
 	@Override

@@ -99,6 +99,13 @@ public class LimitedPriorityQueueArrayTests {
 	}
 	
 	@Test 
+	public void testEnqueueNullElement() throws EmptyCollectionException{
+		String n1 = null;
+		pq3.enqueue(1, n1);
+		
+	}
+	
+	@Test 
 	public void testEnqueueFullMayorPrio() throws EmptyCollectionException{
 	
 		String n1 = "Namjoon";
@@ -110,8 +117,24 @@ public class LimitedPriorityQueueArrayTests {
 		assertNull(pq3.enqueue(2, n2));
 		assertNull(pq3.enqueue(2, n3));
 		assertEquals("Yoongi", pq3.enqueue(1, n4));
+		assertEquals("[( Priority:1 (Namjoon, Hobi)), ( Priority:2 (Jin))]", pq3.toString());
 		
 	}
+	
+	@Test 
+	public void testEnqueueNoElementInQueue() throws EmptyCollectionException{
+		
+		String n1 = "Namjoon";
+		String n3 = "Yoongi";
+		
+		assertNull(pq3.enqueue(1, n1));
+		
+		assertNull(pq3.enqueue(2, n3));
+		
+	}
+	
+	
+	
 	@Test 
 	public void testEnqueueFullMenorPrio() throws EmptyCollectionException{
 	
@@ -137,7 +160,7 @@ public class LimitedPriorityQueueArrayTests {
 		pq3.enqueue(0, n1);
 		
 	}
-	/*
+	
 	@Test (expected = IllegalArgumentException.class)
 	public void testEnqueueIsEmpty() throws EmptyCollectionException {
 	
@@ -148,10 +171,10 @@ public class LimitedPriorityQueueArrayTests {
 		assertNull(pq3.enqueue(1, n1));
 		assertNull(pq3.enqueue(1, n2));
 		
-		assertEquals("Yoongi", pq3.enqueue(2, n3));
+		assertEquals(null, pq3.enqueue(2, n3));
 		
 	}
-	*/
+	
 	@Test
 	public void testFirst() throws EmptyCollectionException {
 	
@@ -164,6 +187,49 @@ public class LimitedPriorityQueueArrayTests {
 		assertEquals("Namjoon", pq3.first());
 	}
 	
+	@Test (expected = EmptyCollectionException.class)
+	public void testFirstEmpty() throws EmptyCollectionException{
+		pq3.first();
+	}
+	
+	@Test 
+	public void  testDequeue() throws EmptyCollectionException{
+		
+		String n1 = "Namjoon";
+		String n2 = "Jin";
+		
+		pq3.enqueue(1, n1);
+		pq3.enqueue(2, n2);
+		assertEquals("Namjoon", pq3.dequeue());
+	}
+	
+	@Test (expected = EmptyCollectionException.class)
+	public void  testDequeueEmpty() throws EmptyCollectionException{
+		
+		pq3.dequeue();
+		
+	}
+	
+	
+	@Test
+	public void testIsEmptyTrue() throws EmptyCollectionException {
+		
+		assertTrue(pq3.isEmpty());
+		
+	}
+	
+	@Test
+	public void testIsEmptyFalse() throws EmptyCollectionException {
+		String n1 = "Namjoon";
+		String n2 = "Jin";
+		
+		pq3.enqueue(1, n1);
+		pq3.enqueue(2, n2);
+		
+		assertFalse(pq3.isEmpty());
+		
+	}
+	
 	@Test
 	public void testEnVacia() throws Exception {
 		
@@ -172,7 +238,8 @@ public class LimitedPriorityQueueArrayTests {
 	    Assert.assertEquals(pq3.getSize(), 0);
 	    Assert.assertEquals(pq3.toString(), "[]");
 	}
-		/*
+	
+		
 	@Test
 	public void testInsertarHastaLLenar() throws Exception{
 	    Assert.assertEquals(pq3.enqueue(1, "Prior1_1"), null);
@@ -210,5 +277,6 @@ public class LimitedPriorityQueueArrayTests {
 	    Assert.assertEquals(pq3.toString(), "[( Priority:1 (Prior1_1, Prior1_2)), ( Priority:2 (Prior2_1))]");
 	  
 	}
-	*/
+	
+	
 }

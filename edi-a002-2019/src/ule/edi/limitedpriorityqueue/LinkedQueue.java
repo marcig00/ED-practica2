@@ -117,8 +117,7 @@ public class LinkedQueue<T> implements QueueADT<T> {
 	   * AUX = REAR
 	   */
 		T deleteElement = null;
-		Node<T> aux = new Node<T>();
-		aux = front;
+		Node<T> aux = front;
 		
 		if(isEmpty() == true) {
 			throw new EmptyCollectionException("linkedQueue");
