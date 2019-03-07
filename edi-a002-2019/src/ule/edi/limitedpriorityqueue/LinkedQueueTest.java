@@ -2,9 +2,6 @@ package ule.edi.limitedpriorityqueue;
 
 import static org.junit.Assert.*;
 
-
-import javax.xml.soap.Node;
-
 import org.junit.*;
 
 public class LinkedQueueTest {
