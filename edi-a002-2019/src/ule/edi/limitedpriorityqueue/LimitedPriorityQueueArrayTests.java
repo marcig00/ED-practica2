@@ -173,6 +173,7 @@ public class LimitedPriorityQueueArrayTests {
 		
 		assertEquals(null, pq3.enqueue(2, n3));
 		
+		
 	}
 	
 	@Test
@@ -215,6 +216,7 @@ public class LimitedPriorityQueueArrayTests {
 	public void testIsEmptyTrue() throws EmptyCollectionException {
 		
 		assertTrue(pq3.isEmpty());
+		assertEquals("[]",pq3.toString() );
 		
 	}
 	

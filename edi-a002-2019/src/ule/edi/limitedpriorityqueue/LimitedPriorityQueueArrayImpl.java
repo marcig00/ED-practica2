@@ -129,21 +129,36 @@ public class LimitedPriorityQueueArrayImpl<T> implements LimitedPriorityQueue<T>
 
 	
 	@Override
+
 	public String toString() {
-		if (! this.isEmpty()) {
-			StringBuffer rx = new StringBuffer();
-			rx.append("[");
-			for (int n = 0; n < this.npriorities; ++n) {
+
+	boolean separator=false;
+
+	if (! this.isEmpty()) {
+		StringBuffer rx = new StringBuffer();
+	    
+		rx.append("[");
+		for (int n = 0; n < this.npriorities; ++n) {
+			if (!colas.get(n).isEmpty()){
+
 				rx.append("( Priority:"+(n+1)+" (");
 				rx.append(colas.get(n).toString());
-				rx.append(")), ");
-			}
-			rx.delete(rx.length() - 2, rx.length());
-			rx.append("]");
-			return rx.toString();
-		} else {
-			return "[]";
+	            rx.append(")), ");
+	            separator=true;
+			}       
 		}
+		if (separator) 
+			
+		
+			rx.delete(rx.length() - 2,rx.length());
+	        rx.append("]");
+	        return rx.toString();
+		
+		} else {
+
+	         return "[]";
+	    }
+
 	}
 
 };
