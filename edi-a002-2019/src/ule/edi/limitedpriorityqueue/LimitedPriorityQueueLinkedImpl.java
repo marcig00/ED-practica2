@@ -70,7 +70,7 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
     }
 
 	@Override
-	public T enqueue(int p, T element) throws EmptyCollectionException {
+	public T enqueue(int p, T element) {
 		T returnedElement = null;
 		
 		if(element == null) {//Comprobar elemento no nulo
@@ -84,32 +84,50 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
 					first = new QueueNode<T>(p, element);
 					count++;
 				}else if( isFull()) {//Si esta llena
-					simpleEnqueue(p, element);
-					returnedElement = deququeLastElement(); //eliminar el elemento que lleva menos esperando en todo el arraylist
-					return returnedElement;
-									
-				}else if(p < first.priority) {//insertar delante de prioridades menores
-				
-					if(isFull() == false) {
-					QueueNode<T> nuevo = new QueueNode<T>(p, element);
-					nuevo.next = first;
-					first = nuevo;
-					count++;
+					
+					if(getSize() == 1) {//un elemento
+						 enqueueElement1(p, element);		
 					}else {
-						returnedElement = deququeLastElement();
-					}
+						try {
+						simpleEnqueue(p, element);
+						returnedElement = dequeueLastElement(); //eliminar el elemento que lleva menos esperando en todo el arraylist
+						}catch(Exception EmptyCollectionException){
+							
+						}
+					}				
 				}else { //General
-					simpleEnqueue(p, element);
+					if(getSize() == 1) {//un elemento
+						 enqueueElement1(p, element);		
+					}else {
+						simpleEnqueue(p, element);
+						
+					}
 				}
 			}
 		}
 		return returnedElement;
 	}
+	
+	private void enqueueElement1(int p, T element) {
+		
+		QueueNode<T> nuevo = new QueueNode<T>(p, element);
+		 if(p < first.priority) {//Delante del primero
+			 nuevo.next = first;
+			 first = nuevo;
+			
+		 }else {
+			 first.next = nuevo;
+		 }
+		 count++;
+
+		
+	}
+	
 	private void simpleEnqueue (int p , T element) {
 		QueueNode<T> aux = first;
 		QueueNode<T> nuevo = new QueueNode<T>(p, element);
 		
-		while(aux.next != null  && p > aux.next.priority) {
+		while(aux.next != null  && p >= aux.next.priority) {
 			aux = aux.next;
 		}
 			nuevo.next = aux.next;
@@ -119,15 +137,12 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
 		
 	}
 	
-	private T deququeLastElement() throws EmptyCollectionException {
+	private T dequeueLastElement() throws EmptyCollectionException {
 		T returnedElement = null;
 		QueueNode<T> aux = first;
 		
 		if(isEmpty() == true) {
 			throw new EmptyCollectionException("LimitedPriorityQueueLinkedImpl");
-		}else if(getSize() == 1){
-			returnedElement = first.content;
-			first = null;
 		}else {
 			while(aux.next.next != null) {
 				aux = aux.next;
@@ -143,7 +158,7 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
 	@Override
 	public T first() throws EmptyCollectionException {
 		
-		T firstElement = first.content;
+		T firstElement = null;
 		
 		if(isEmpty() == true){
 			
@@ -176,19 +191,35 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
 
 	@Override
 	public String toString() {
+		
 		boolean separator=false;
-		QueueNode<T> aux = first;
+
+		QueueNode<T> aux = first; 
+		QueueNode<T> aux1 = first;
 		int auxPrio = 0;
 		
 	    if (! this.isEmpty()) {
+	    	
 	    	StringBuffer rx = new StringBuffer();
             rx.append("[");
-            while(aux.priority < aux.next.priority) {
-            	rx.append("( Priority:"+aux.priority+" (");
-            	rx.append(aux.toString());
-            	rx.append(")), ");
-            	separator = true;
+            while(aux1.next != null) { 
+            	aux1 = aux1.next; 
             }
+            	while(aux.next != null ) { //recorre la lista hasta el penultimo
+            		auxPrio = aux.priority;
+            		rx.append("( Priority:"+auxPrio+" (");
+            		rx.append(aux.content.toString());
+            	
+            		if(aux.next == aux1) {
+            			rx.append(", ");
+            		rx.append(aux.next.content.toString());
+            		}
+            		rx.append(")), ");
+            		aux = aux.next;
+            		
+            	
+            }
+            	separator = true;
             
             if(separator == true) {
             	  rx.delete(rx.length() - 2,rx.length());
@@ -198,10 +229,9 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
                   return rx.toString();
             	
             }
-        } else {¡
-
+        }
             return "[]";
 
-        }
+        
 	}
 };
