@@ -128,6 +128,7 @@ public class LinkedQueue<T> implements QueueADT<T> {
 			rear = null;
 			return deleteElement;
 			
+			
 		}else {
 		
 		
@@ -137,8 +138,8 @@ public class LinkedQueue<T> implements QueueADT<T> {
 			deleteElement = aux.next.element;
 			aux.next = null;
 			rear = aux;	
-			count--;
 		}
+		count--;
 		return deleteElement;
 	}
 
