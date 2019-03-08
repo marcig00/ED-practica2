@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+import ule.edi.limitedpriorityqueue.LinkedQueue.Node;
+
 
 public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T> {
 	    private int capacity;
@@ -68,9 +70,8 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
     }
 
 	@Override
-	public T enqueue(int p, T element) {
+	public T enqueue(int p, T element) throws EmptyCollectionException {
 		T returnedElement = null;
-		QueueNode<T> aux = first;
 		
 		if(element == null) {//Comprobar elemento no nulo
 			throw new NullPointerException();
@@ -83,34 +84,89 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
 					first = new QueueNode<T>(p, element);
 					count++;
 				}else if( isFull()) {//Si esta llena
-					
-				}else { //General
+					simpleEnqueue(p, element);
+					returnedElement = deququeLastElement(); //eliminar el elemento que lleva menos esperando en todo el arraylist
+					return returnedElement;
+									
+				}else if(p < first.priority) {//insertar delante de prioridades menores
+				
+					if(isFull() == false) {
 					QueueNode<T> nuevo = new QueueNode<T>(p, element);
-					while(aux.next != null ) {
-						aux = aux.next;
-					}
-					if(p == aux.priority) {
-						nuevo = aux.next;
-						aux.next = nuevo;
+					nuevo.next = first;
+					first = nuevo;
+					count++;
 					}else {
-						
+						returnedElement = deququeLastElement();
 					}
+				}else { //General
+					simpleEnqueue(p, element);
 				}
 			}
 		}
 		return returnedElement;
 	}
-
+	private void simpleEnqueue (int p , T element) {
+		QueueNode<T> aux = first;
+		QueueNode<T> nuevo = new QueueNode<T>(p, element);
+		
+		while(aux.next != null  && p > aux.next.priority) {
+			aux = aux.next;
+		}
+			nuevo.next = aux.next;
+			aux.next = nuevo;
+			count++;
+		
+		
+	}
+	
+	private T deququeLastElement() throws EmptyCollectionException {
+		T returnedElement = null;
+		QueueNode<T> aux = first;
+		
+		if(isEmpty() == true) {
+			throw new EmptyCollectionException("LimitedPriorityQueueLinkedImpl");
+		}else if(getSize() == 1){
+			returnedElement = first.content;
+			first = null;
+		}else {
+			while(aux.next.next != null) {
+				aux = aux.next;
+			}
+			returnedElement = aux.next.content;
+			aux.next = null;
+		}
+		
+		count--;
+		return returnedElement;
+	}
+	
 	@Override
 	public T first() throws EmptyCollectionException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		T firstElement = first.content;
+		
+		if(isEmpty() == true){
+			
+			throw new EmptyCollectionException("linkedQueue");
+			
+		}else{
+			firstElement = first.content;
+		}
+		return firstElement;
 	}
 
 	@Override
 	public T dequeue() throws EmptyCollectionException {
-		// TODO Auto-generated method stub
-		return null;
+		T deququeElement = null;
+		
+		if(isEmpty() == true) {
+			throw new EmptyCollectionException("linkedQueue");
+		}else {
+		deququeElement = first.content;
+		first = first.next;
+		count--;
+		}
+		return deququeElement;
 	}
 
 	@Override
@@ -120,18 +176,32 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
 
 	@Override
 	public String toString() {
-		if (! this.isEmpty()) {
-			StringBuffer rx = new StringBuffer();
-			rx.append("[");
-		      // TODO : MOSTRAR LOS ELEMENTOS DE LA COLA DE PRIORIDAD CON EL MISMO FORMATO QUE LA OTRA IMPLEMENTACIÃ“N
+		boolean separator=false;
+		QueueNode<T> aux = first;
+		int auxPrio = 0;
 		
-			rx.append("]");
-			return rx.toString();
-		} else {
-			return "[]";
-		}
+	    if (! this.isEmpty()) {
+	    	StringBuffer rx = new StringBuffer();
+            rx.append("[");
+            while(aux.priority < aux.next.priority) {
+            	rx.append("( Priority:"+aux.priority+" (");
+            	rx.append(aux.toString());
+            	rx.append(")), ");
+            	separator = true;
+            }
+            
+            if(separator == true) {
+            	  rx.delete(rx.length() - 2,rx.length());
+
+                  rx.append("]");
+
+                  return rx.toString();
+            	
+            }
+        } else {¡
+
+            return "[]";
+
+        }
 	}
-
-
-  
-}
+};
