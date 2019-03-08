@@ -74,7 +74,7 @@ public class LimitedPriorityQueueLinkedTests {
 	}
 	
 	@Test
-	public void testIsFullTrue(){
+	public void testIsFullTrue() throws EmptyCollectionException {
 		
 		String n1 = "Namjoon";
 		String n2 = "Jin";
