@@ -199,30 +199,38 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
 	public String toString() {
 		
 		boolean separator=false;
-
+		if (! this.isEmpty()) {
 		QueueNode<T> aux = first; 
 		QueueNode<T> aux1 = first.next;
 		int auxPrio = 0;
 		
-	    if (! this.isEmpty()) {
+	   
 	    	
 	    	StringBuffer rx = new StringBuffer();
             rx.append("[");
             
-            	while(aux.next != null ) { //recorre la lista hasta el penultimo
+            	while(aux != null && aux1 != null ) { //recorre la lista hasta el penultimo
             		
-            
-            		auxPrio = aux.priority;
-            		rx.append("( Priority:"+auxPrio+" (");
-            		rx.append(aux.content.toString());
-            	
-            		if(aux.next == aux1) {
+            		
+            		if(aux.priority == aux1.priority) {
+            		
+            			auxPrio = aux.priority;
+            			rx.append("( Priority:"+auxPrio+" (");
+            			rx.append(aux.content.toString());
             			rx.append(", ");
-            		rx.append(aux.next.content.toString());
+            			rx.append(aux1.content.toString());
+            			rx.append(")) ");
+            			
+            		}else if(aux.priority != aux1.priority) {
+            			auxPrio = aux.priority;
+            			rx.append("( Priority:"+auxPrio+" (");
+            			rx.append(aux.content.toString());
+            			rx.append(")), ");
+            			
             		}
-            		rx.append(")), ");
+            		
             		aux = aux.next;
-            	
+            		aux1 = aux1.next;
             }
             	separator = true;
             
