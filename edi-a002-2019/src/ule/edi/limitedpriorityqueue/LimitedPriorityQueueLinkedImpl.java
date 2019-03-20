@@ -158,7 +158,7 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
 		}
 		
 		count--;
-		return returnedElement;
+		return returnedElement; 
 	}
 	
 	@Override
@@ -200,40 +200,45 @@ public class LimitedPriorityQueueLinkedImpl<T> implements LimitedPriorityQueue<T
 		
 		boolean separator=false;
 		if (! this.isEmpty()) {
+			
 		QueueNode<T> aux = first; 
-		QueueNode<T> aux1 = first.next;
-		int auxPrio = 0;
+		QueueNode<T> aux2 = first.next; 
 		
-	   
 	    	
 	    	StringBuffer rx = new StringBuffer();
             rx.append("[");
             
-            	while(aux != null && aux1 != null ) { //recorre la lista hasta el penultimo
+            if(first != null) {//si es primero
+            	
+        		rx.append("( Priority:"+first.priority+" (");
+    			rx.append(first.content.toString());
+        		
+        	} 
+        	
+            while(aux != null && aux2 != null) {  
+            	
             		
-            		
-            		if(aux.priority == aux1.priority) {
-            		
-            			auxPrio = aux.priority;
-            			rx.append("( Priority:"+auxPrio+" (");
-            			rx.append(aux.content.toString());
+            		if(aux.priority == aux2.priority) {//misma prioridad
             			rx.append(", ");
-            			rx.append(aux1.content.toString());
-            			rx.append(")) ");
-            			
-            		}else if(aux.priority != aux1.priority) {
-            			auxPrio = aux.priority;
-            			rx.append("( Priority:"+auxPrio+" (");
-            			rx.append(aux.content.toString());
+            			rx.append(aux2.content.toString());
+            		}else {
             			rx.append(")), ");
-            			
+            			rx.append("( Priority:"+aux2.priority+" (");
+            			rx.append(aux2.content.toString());
             		}
             		
-            		aux = aux.next;
-            		aux1 = aux1.next;
+            		
+            	if(aux2.next == null) {
+            		rx.append(")), "); 
+            	}
+            	
+            	aux = aux.next;
+        		aux2 = aux2.next;
+        	
             }
+           
             	separator = true;
-            
+           
             if(separator == true) {
             	  rx.delete(rx.length() - 2,rx.length());
 

@@ -151,17 +151,16 @@ public class LimitedPriorityQueueLinkedTests {
 		String n1 = "Hobi";
 		String n2 = "Tae";
 		LimitedPriorityQueueLinkedImpl<String> pq1 = new LimitedPriorityQueueLinkedImpl<String>(1);
-		assertEquals(null, pq1.enqueue(2, n1));
+		pq1.enqueue(2, n1);
 		assertTrue(pq1.isFull());
 		
 		assertEquals("Hobi", pq1.enqueue(1, n2));
 		
 	}
 	
-	@Test 
+	@Test (expected = NullPointerException.class)
 	public void testEnqueueNullElement() throws EmptyCollectionException{
-		String n1 = null;
-		pq3.enqueue(1, n1);
+		pq3.enqueue(1, null);
 		
 	}
 	
@@ -184,7 +183,7 @@ public class LimitedPriorityQueueLinkedTests {
 		
 		assertEquals(null, pq3.enqueue(1, n1));
 		assertEquals(null, pq3.enqueue(2, n2));
-		assertEquals(null, pq3.enqueue(2, n3));	
+		assertEquals(null, pq3.enqueue(2, n3));
 		assertEquals("Yoongi", pq3.enqueue(3, n4));
 		
 	}
@@ -263,7 +262,7 @@ public class LimitedPriorityQueueLinkedTests {
 	    Assert.assertEquals(pq3.enqueue(1, "Prior1_1"), null);
 	    Assert.assertEquals(pq3.enqueue(2, "Prior2_1"), null);
 	    Assert.assertEquals(pq3.enqueue(2, "Prior2_2"), null);
-	    Assert.assertEquals(pq3.toString(), "[( Priority:1 (Prior1_1)), ( Priority:2 (Prior2_1, Prior2_2))]");
+	    Assert.assertEquals( "[( Priority:1 (Prior1_1)), ( Priority:2 (Prior2_1, Prior2_2))]", pq3.toString());
 	    Assert.assertEquals(pq3.enqueue(1, "Prior1_2"), "Prior2_2");
 	    Assert.assertEquals(pq3.toString(), "[( Priority:1 (Prior1_1, Prior1_2)), ( Priority:2 (Prior2_1))]");
 	  
