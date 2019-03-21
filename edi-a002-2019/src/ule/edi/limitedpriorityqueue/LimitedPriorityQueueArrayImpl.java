@@ -58,7 +58,7 @@ public class LimitedPriorityQueueArrayImpl<T> implements LimitedPriorityQueue<T>
     }
 
     @Override
-	public T enqueue(int p, T element) throws EmptyCollectionException {
+	public T enqueue(int p, T element){
 		
 		T returnedElement = null;
 		if(element == null) {
@@ -72,9 +72,13 @@ public class LimitedPriorityQueueArrayImpl<T> implements LimitedPriorityQueue<T>
 				count++;
 				for(int i = npriorities-1; i >= 0; i--) {
 					if(colas.get(i).isEmpty() != true) {
-						returnedElement =  colas.get(i).dequeueLast(); //eliminar el elemento que lleva menos esperando en todo el arraylist
-						count--;
-						return returnedElement;
+						try {
+							returnedElement =  colas.get(i).dequeueLast(); //eliminar el elemento que lleva menos esperando en todo el arraylist	
+							count--;
+							return returnedElement;
+						}catch(Exception EmptyCollectionException) {
+							
+						}
 					}
 				}	
 			}else {

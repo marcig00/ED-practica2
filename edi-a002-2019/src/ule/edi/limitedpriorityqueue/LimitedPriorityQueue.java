@@ -35,7 +35,7 @@ public interface LimitedPriorityQueue<T> {
 	 * @throws EmptyCollectionException 
 	 *  @throws IllegalArgumentException  si la prioridad no es correcta       
 	 */
-	public T enqueue(int p, T elem) throws EmptyCollectionException;
+	public T enqueue(int p, T elem);
 
 	/**
 	 * Obtener el elemento con la prioridad mayor que más tiempo lleve en la

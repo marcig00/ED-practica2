@@ -98,7 +98,7 @@ public class LimitedPriorityQueueArrayTests {
 		assertNull(pq3.enqueue(2, n2));
 	}
 	
-	@Test 
+	@Test (expected = NullPointerException.class)
 	public void testEnqueueNullElement() throws EmptyCollectionException{
 		String n1 = null;
 		pq3.enqueue(1, n1);
